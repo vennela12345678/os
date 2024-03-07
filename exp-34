@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_RECORDS 100
+struct Record {
+    int id;
+    char data[50]; 
+};
+void readSequentially(struct Record records[], int numRecords) {
+    for (int i = 0; i < numRecords; i++) {
+        printf("Record ID: %d, Data: %s\n", records[i].id, records[i].data);
+    }
+}
+
+int main() {
+    int numRecords;
+    printf("Enter the number of records in the file: ");
+    scanf("%d", &numRecords);
+
+    if (numRecords <= 0 || numRecords > MAX_RECORDS) {
+        printf("Invalid number of records. Please enter a value between 1 and %d.\n", MAX_RECORDS);
+        return 1; 
+    }
+
+    struct Record records[MAX_RECORDS];
+
+    for (int i = 0; i < numRecords; i++) {
+        records[i].id = i + 1; 
+        printf("Enter data for Record %d: ", records[i].id);
+        scanf("%s", records[i].data);
+    }
+
+    printf("\nReading records sequentially:\n");
+    readSequentially(records, numRecords);
+
+    return 0;
+}
+
+Output:
+Enter the number of records in the file: 2
+Enter data for Record 1: 1
+Enter data for Record 2: 3
+
+Reading records sequentially:
+Record ID: 1, Data: 1
+Record ID: 2, Data: 3
