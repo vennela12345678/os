@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main() {
+    int result;
+
+    result = chmod("text.txt", S_IRUSR | S_IWUSR | S_IXUSR |
+                            S_IRGRP | S_IXGRP |
+                            S_IROTH | S_IXOTH);
+
+    if (result == 0) {
+        printf("File permissions changed successfully.\n");
+    } else {
+        perror("Error changing file permissions");
+    }
+
+    return 0;
+}
+
+Output:
+Error changing file permissions: No such file or directory
