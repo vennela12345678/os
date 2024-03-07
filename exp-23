@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void scan(int arr[], int size, int head, int direction) {
+    int seek_count = 0;
+    int i;
+
+    printf("Seek Sequence is:\n");
+
+    for (i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if ((arr[j] > head && arr[j + 1] < head && direction == 1) ||
+                (arr[j] < head && arr[j + 1] > head && direction == -1)) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    if (direction == 1) {
+        for (i = size - 1; i >= 0; i--) {
+            printf("%d ", arr[i]);
+            seek_count += abs(arr[i] - head);
+            head = arr[i];
+        }
+    } else {
+        for (i = 0; i < size; i++) {
+            printf("%d ", arr[i]);
+            seek_count += abs(arr[i] - head);
+            head = arr[i];
+        }
+    }
+
+    printf("\nTotal number of seek operations = %d\n", seek_count);
+}
+
+int main() {
+    int arr[] = {176, 79, 34, 60, 92, 11, 41, 114};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    scan(arr, size, 50, 1);
+
+    return 0;
+}
+
+Output:
+Seek Sequence is:
+114 92 60 79 176 41 11 34 
+Total number of seek operations = 422
