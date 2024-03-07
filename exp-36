@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Block {
+    int blockNumber;
+    struct Block* nextBlock;
+} Block;
+
+typedef struct File {
+    int fileId;
+    Block* firstBlock;
+    Block* lastBlock;
+} File;
+
+typedef struct Directory {
+    File* files;
+    int fileCount;
+} Directory;
+
+void initializeDirectory(Directory* directory);
+File* createFile(Directory* directory);
+void allocateBlock(File* file);
+void deallocateFile(File* file);
+void displayDirectory(Directory* directory);
+
+int main() {
+    Directory directory;
+    initializeDirectory(&directory);
+
+    File* file1 = createFile(&directory);
+    File* file2 = createFile(&directory);
+
+    allocateBlock(file1);
+    allocateBlock(file1);
+    allocateBlock(file2);
+
+    displayDirectory(&directory);
+
+    deallocateFile(file1);
+    displayDirectory(&directory);
+
+    return 0;
+}
+
+void initializeDirectory(Directory* directory) {
+    directory->files = NULL;
+    directory->fileCount = 0;
+}
+
+File* createFile(Directory* directory) {
+    directory->fileCount++;
+    directory->files = (File*)realloc(directory->files, directory->fileCount * sizeof(File));
+
+
+    File* newFile = &(directory->files[directory->fileCount - 1]);
+    newFile->fileId = directory->fileCount;
+    newFile->firstBlock = NULL;
+    newFile->lastBlock = NULL;
+
+    return newFile;
+}
+
+void allocateBlock(File* file) {
+    Block* newBlock = (Block*)malloc(sizeof(Block));
+
+    newBlock->blockNumber = rand() % 1000; 
+    newBlock->nextBlock = NULL;
+
+    if (file->lastBlock == NULL) {
+        file->firstBlock = newBlock;
+        file->lastBlock = newBlock;
+    } else {
+        file->lastBlock->nextBlock = newBlock;
+        file->lastBlock = newBlock;
+    }
+}
+
+void deallocateFile(File* file) {
+    Block* currentBlock = file->firstBlock;
+    Block* nextBlock;
+
+    while (currentBlock != NULL) {
+        nextBlock = currentBlock->nextBlock;
+        free(currentBlock);
+        currentBlock = nextBlock;
+    }
+
+    file->firstBlock = NULL;
+    file->lastBlock = NULL;
+}
+
+void displayDirectory(Directory* directory) {
+    printf("\nDirectory Contents:\n");
+
+    for (int i = 0; i < directory->fileCount; i++) {
+        File* file = &(directory->files[i]);
+        printf("File %d:\n", file->fileId);
+
+        Block* currentBlock = file->firstBlock;
+        while (currentBlock != NULL) {
+            printf("  Block %d\n", currentBlock->blockNumber);
+            currentBlock = currentBlock->nextBlock;
+        }
+    }
+
+    printf("\n");
+}
+
+Output:
+Directory Contents:
+File 1:
+  Block 383
+  Block 886
+File 2:
+  Block 777
+
+
+Directory Contents:
+File 1:
+File 2:
+  Block 777
