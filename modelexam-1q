@@ -1,0 +1,61 @@
+#include<stdio.h>
+int main()
+{
+	int a[10][10],b[10][10];
+	float avg_tat,avg_wt;
+	int i,j,n,temp,total=0,index;
+	printf("enter the process:");
+	scanf("%d",&n);
+	printf("enter the brust time");
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i][1]);
+		a[i][1]=i+1;
+	}
+	printf("enter the AT:");
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&b[i][1]);
+	}
+	for(i=0;i<n;i++)
+	{
+		index=i;
+		for(j=i+1;j<n;j++)
+		{
+			if(a[j][i]>a[index][1])
+			{
+				index=j;
+				temp=a[i][1];
+				a[i][1]=a[index][1];
+				a[index][1]=temp;
+				temp = a[i][0];
+				a[i][0] = a[index][0];
+				a[index][0] = temp;
+			}
+			a[0][2] = 0;
+			for (i = 1; i < n; i++) {
+			a[i][2] = 0;
+			for (j = 0; j < i; j++)
+			a[i][2] += a[j][1];
+			total += a[i][2];
+		}
+	avg_tat = (float)total / n;
+	avg_wt = (float)avg_tat/n;
+	printf("Average Waiting Time= %f", avg_wt);
+	printf("\nAverage Turnaround Time= %f", avg_tat);
+		}	
+	}	
+	
+	
+}
+enter the process:4
+enter the brust time3
+8
+9
+2
+enter the AT:7
+5
+8
+9
+Average Waiting Time= 0.687500
+Average Turnaround Time= 2.750000
